@@ -2,18 +2,34 @@ node {
   def project = 'REPLACE_WITH_YOUR_PROJECT_ID'
   def appName = 'app-go'
   def feSvcName = "${appName}-frontend"
-  def imageTag = "krol/${appName}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
 
-  checkout scm
+  final scmVars = checkout(scm)
+  echo "scmVars: ${scmVars}"
+  echo "scmVars.GIT_COMMIT: ${scmVars.GIT_COMMIT}"
+  echo "scmVars.GIT_BRANCH: ${scmVars.GIT_BRANCH}"
+  def imageTag = "krol/${appName}:${env.BRANCH_NAME}-${scmVars.GIT_COMMIT}"
+
+  stage 'Check docker version'
+  sh("docker version")
 
   stage 'Build image'
-  sh("docker build -t ${imageTag} .")
+  def customImage = docker.build("${imageTag}")
 
   stage 'Run Go tests'
-  sh("docker run ${imageTag} go test")
+  customImage.inside {
+      sh 'go test'
+  }
 
   stage 'Push image to registry'
-  sh("docker -- push ${imageTag}")
+
+  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'docker-krol', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+    sh "docker login -u=$USERNAME -p=$PASSWORD"
+  }
+
+  withDockerRegistry([ credentialsId: "docker-krol", url: "https://index.docker.io/v2/" ]) {
+      sh 'echo uname=$USERNAME pwd=$PASSWORD'
+      sh("docker push ${imageTag}")
+  }
 
   stage "Deploy Application"
   switch (env.BRANCH_NAME) {
@@ -29,7 +45,7 @@ node {
     // Roll out to production
     case "master":
         // Change deployed image in canary to the one we just built
-        sh("sed -i.bak 's#gcr.io/cloud-solutions-images/gceme:1.0.0#${imageTag}#' ./k8s/production/*.yaml")
+        sh("sed -i.bak 's#krol/app-go:dev#${imageTag}#' ./k8s/production/*.yaml")
         sh("kubectl --namespace=production apply -f k8s/services/")
         sh("kubectl --namespace=production apply -f k8s/production/")
         sh("echo http://`kubectl --namespace=production get service/${feSvcName} --output=json | jq -r '.status.loadBalancer.ingress[0].ip'` > ${feSvcName}")
@@ -38,10 +54,7 @@ node {
     // Roll out a dev environment
     default:
         // Create namespace if it doesn't exist
-        sh("kubectl get ns ${env.BRANCH_NAME} || kubectl create ns ${env.BRANCH_NAME}")
-        // Don't use public load balancing for development branches
-        sh("sed -i.bak 's#LoadBalancer#ClusterIP#' ./k8s/services/frontend.yaml")
-        sh("sed -i.bak 's#gcr.io/cloud-solutions-images/gceme:1.0.0#${imageTag}#' ./k8s/dev/*.yaml")
+        sh("sed -i.bak 's#krol/app-go:dev#${imageTag}#' ./k8s/dev/*.yaml")
         sh("kubectl --namespace=${env.BRANCH_NAME} apply -f k8s/services/")
         sh("kubectl --namespace=${env.BRANCH_NAME} apply -f k8s/dev/")
         echo 'To access your environment run `kubectl proxy`'

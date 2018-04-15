@@ -11,7 +11,7 @@ build:
 	docker build -t krol/app-go:dev .
 
 test:
-	docker run -it --rm krol/app-go:dev /bin/sh
+	docker run -it --rm krol/app-go:dev go test
 
 push:
 	docker push krol/app-go:dev
