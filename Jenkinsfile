@@ -19,7 +19,7 @@ node {
   sh("docker run ${imageTag} go test")
 
   stage 'Push image to registry'
-  sh("docker -- push ${imageTag}")
+  sh("docker push ${imageTag}")
 
   stage "Deploy Application"
   switch (env.BRANCH_NAME) {
