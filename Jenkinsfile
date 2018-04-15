@@ -2,9 +2,15 @@ node {
   def project = 'REPLACE_WITH_YOUR_PROJECT_ID'
   def appName = 'app-go'
   def feSvcName = "${appName}-frontend"
-  def imageTag = "krol/${appName}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
 
-  checkout scm
+  final scmVars = checkout(scm)
+  echo "scmVars: ${scmVars}"
+  echo "scmVars.GIT_COMMIT: ${scmVars.GIT_COMMIT}"
+  echo "scmVars.GIT_BRANCH: ${scmVars.GIT_BRANCH}"
+  def imageTag = "krol/${appName}:${scmVars.GIT_COMMIT}"
+
+  stage 'Check docker version'
+  sh("docker version")
 
   stage 'Build image'
   sh("docker build -t ${imageTag} .")
