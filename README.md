@@ -13,6 +13,7 @@ helm upgrade  -f values.yaml <RELEASE-NAME> stable/jenkins
 
 ```
 $ kubectl create namespace production
+$ kubectl create namespace stage
 $ kubectl --namespace=production apply -f k8s/production
 $ kubectl --namespace=production apply -f k8s/canary
 $ kubectl --namespace=production apply -f k8s/services
