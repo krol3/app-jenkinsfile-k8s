@@ -41,7 +41,7 @@ type Instance struct {
 	Error      string
 }
 
-const version string = "1.0.0"
+const version string = "2.0.0"
 
 func main() {
 	showversion := flag.Bool("version", false, "display version")
@@ -190,9 +190,9 @@ const (
 <div class="col s8">
 
 
-<div class="card blue">
+<div class="card green">
 <div class="card-content white-text">
-<div class="card-title">Backend that serviced this request</div>
+<div class="card-title">Backend that serviced this request - Canary </div>
 </div>
 <div class="card-content white">
 <table class="bordered">
@@ -234,9 +234,9 @@ const (
 </div>
 </div>
 
-<div class="card blue">
+<div class="card green">
 <div class="card-content white-text">
-<div class="card-title">Proxy that handled this request</div>
+<div class="card-title">Proxy that handled this request - Canary</div>
 </div>
 <div class="card-content white">
 <table class="bordered">
