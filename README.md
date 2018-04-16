@@ -1,4 +1,4 @@
-# Sample scalable application using a deployment pipeline, helm and kubernetes
+# Sample scalable Application using a canary deployment, Helm and Kubernetes
 
 Dev, stage and production environments with canary deployment.
 
@@ -8,9 +8,16 @@ Dev, stage and production environments with canary deployment.
 - Jenkinsfile
 - Kubernetes deployments
 
+#### Production Service
+
 ![](docs/img/k8s-frontend-app.png)
 
+#### Canary Service
+
+![](docs/img/k8s-frontend-canary.png)
+
 ## Settings kubernetes cluster and Jenkins
+
 [Setting kubernetes, helm and jenkins](k8s-settings/README.md)
 
 ## Deploy applications in kubernetes
@@ -23,7 +30,7 @@ $ kubectl --namespace=production apply -f k8s/canary
 $ kubectl --namespace=production apply -f k8s/services
 ```
 
-Environments isolate by namespaces in kubernetes
+#### Environments isolate by namespaces in kubernetes
 
 ![](docs/img/k8s-environments.png)
 
@@ -36,7 +43,7 @@ deployment.apps "app-frontend-production" autoscaled
 
 ```
 
-Information about the Horizontal pod autoscaler
+#### Information about the Horizontal pod autoscaler
 
 ```
 kubectl --namespace=production get hpa
@@ -44,7 +51,7 @@ kubectl --namespace=production get hpa
 
 ![](docs/img/k8s-scaling.png)
 
-Canary deployment in kubernetes
+#### Canary deployment in kubernetes
 
 ![](docs/img/k8s-canary-deployment.png)
 
@@ -52,6 +59,6 @@ Canary deployment in kubernetes
 
 ![](docs/img/k8s-jenkins-multibranch.png)
 
-Pipeline jenkins
+#### Pipeline jenkins
 
 ![](docs/img/k8s-jenkins-master.png)
