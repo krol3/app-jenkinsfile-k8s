@@ -1,5 +1,9 @@
-# app-jenkinsfile-k8s
-Sample app using jenkinsfile and kubernetes
+# Sample app using jenkinsfile and kubernetes
+- Golang
+- Backend:  ./app
+- frontend: ./app -frontend=true -backend-service=http://backend:8080 -port=8085
+- Jenkinsfile
+- Kubernetes deployments
 
 ## Update Jenkins version
 helm upgrade  -f values.yaml <RELEASE-NAME> stable/jenkins
