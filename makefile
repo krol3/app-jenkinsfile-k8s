@@ -10,6 +10,9 @@ help:
 build:
 	docker build -t krol/app-go:dev .
 
+run:
+	docker run -it --rm krol/app-go:dev sh
+
 test:
 	docker run -it --rm krol/app-go:dev go test
 
