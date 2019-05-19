@@ -35,6 +35,12 @@ run:
 push:
 	docker push $(PREFIX_REP)/${PROJECT}:$(BRANCH_GIT)-$(COMMIT)
 
+jenkins-install:
+	helm install --namespace ci --name j-v1 -f k8s/jenkins/values.yaml stable/jenkins
+
+jenkins-local:
+	kubectl --namespace ci port-forward svc/j-v1-jenkins  8080:8080
+
 # run-backend:
 # 	docker network create sample-nt
 #     $(shell docker run --rm -p 8080:8080 --name backend --network sample-nt krol/app-go:dev)
