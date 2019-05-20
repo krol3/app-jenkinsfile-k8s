@@ -38,8 +38,19 @@ push:
 jenkins-install:
 	helm install --namespace ci --name j-v1 -f k8s/jenkins/values.yaml stable/jenkins
 
+jenkins-upgrade:
+	helm upgrade j-v1 -f k8s/jenkins/values.yaml stable/jenkins
+
 jenkins-local:
 	kubectl --namespace ci port-forward svc/j-v1-jenkins  8080:8080
+
+backend-local:
+	@echo "To test  backend in: http://localhost:8080/"
+	kubectl --namespace production port-forward svc/app-backend  8080:8080
+
+frontend-local:
+	@echo "To test  frontend in: http://localhost:8082/"
+	kubectl --namespace production port-forward svc/app-frontend  8082:80
 
 # run-backend:
 # 	docker network create sample-nt

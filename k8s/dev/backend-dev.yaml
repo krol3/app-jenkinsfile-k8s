@@ -17,7 +17,7 @@ spec:
         image: krol/app-go:dev
         resources:
           limits:
-            memory: "500Mi"
+            memory: "200Mi"
             cpu: "100m"
         imagePullPolicy: Always
         readinessProbe:

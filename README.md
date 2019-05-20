@@ -35,15 +35,28 @@ We will test using minikube
   Configure a multibranch pipeline
   ![](docs/img/setting-job.png)
 
-````
+- Install kubernetes files
+
+```
 
 $ kubectl create namespace production
 $ kubectl create namespace stage
 $ kubectl --namespace=production apply -f k8s/production
 $ kubectl --namespace=production apply -f k8s/canary
-\$ kubectl --namespace=production apply -f k8s/services
+$ kubectl --namespace=production apply -f k8s/services
 
 ```
+
+- Run locally
+
+```
+
+make backend-local
+make frontend-local
+
+```
+
+![](docs/img/frontend-local.png)
 
 #### Environments isolate by namespaces in kubernetes
 
@@ -53,7 +66,7 @@ $ kubectl --namespace=production apply -f k8s/canary
 
 ```
 
-kubectl --namespace=production autoscale deployment app-frontend-production --min=2 --max=5 --cpu-percent=80
+kubectl --namespace=production autoscale deployment app-frontend-production --min=1 --max=5 --cpu-percent=80
 
 deployment.apps "app-frontend-production" autoscaled
 
@@ -80,5 +93,11 @@ kubectl --namespace=production get hpa
 #### Pipeline jenkins
 
 ![](docs/img/k8s-jenkins-master.png)
+
 ```
-````
+
+```
+
+```
+
+```

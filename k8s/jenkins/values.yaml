@@ -12,7 +12,7 @@ master:
   # Used for label app.kubernetes.io/component
   componentName: "jenkins-master"
   image: "jenkins/jenkins"
-  imageTag: "lts"
+  imageTag: "2.177"
   imagePullPolicy: "Always"
   imagePullSecretName:
   # Optionally configure lifetime for master-container
@@ -52,8 +52,8 @@ master:
   # maxUnavailable: 25%
   resources:
     requests:
-      cpu: "50m"
-      memory: "256Mi"
+      cpu: "150m"
+      memory: "556Mi"
     limits:
       cpu: "2000m"
       memory: "4096Mi"
@@ -150,8 +150,9 @@ master:
     - kubernetes:1.14.0
     - workflow-job:2.31
     - workflow-aggregator:2.6
-    - credentials-binding:1.17
+    - credentials-binding:1.18
     - git:3.9.1
+    - docker-plugin:1.1.6
 
   # Enable to always override the installed plugins with the values of 'master.installPlugins' on upgrade or redeployment.
   # overwritePlugins: true
